@@ -1,0 +1,19 @@
+Notes from Aadithya Prakash:
+Round 1:
+	Take in data and spit it out into a raw file. basically 
+	(clenched, Voltage)
+	(clenched, Voltage)
+	(clenched, Voltage)
+
+	Then perform calculations on the data using 
+	Lamba functions on moving window
+
+	Create arf file after performing calculations on the moving window
+
+	Then use weka to classify data
+
+Round 2:
+Getting values from ADC/Interrupts and shit. Get a bunch of data. Then print out classification to terminal
+
+Sliding window algorith. Look at data from 0-3s. Overlap window of 1.5 window. 0-3 then 1.5-4.5. Code in the sliding window. Use interupts, analog in and all the jazz
+
