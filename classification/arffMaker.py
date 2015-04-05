@@ -1,0 +1,86 @@
+import sys
+import movingWindow
+
+
+
+#MAIN
+#sampFreq = 10 #samples/second
+winLen = 50 #samples
+winDisplacement = 25 #samples
+
+if(len(sys.argv) != 3):
+	print 'Usage: python arffMaker.py <input file> <output file>'
+	sys.exit(0)
+
+read = open(sys.argv[1], 'r')
+write = open(sys.argv[2], 'w')
+
+
+
+#split data into different lists based on classification
+data = []
+temp = []
+classification = 0
+for line in read:
+	split = line.split(',')
+	#print str(split)
+	if(len(split) != 2):
+		continue
+	if classification == int(split[0]):
+		temp.append(int(split[1]))
+	else:
+		classification += 1
+		data.append(temp)
+		temp = []
+		temp.append(int(split[1]))
+#append last classification
+data.append(temp)
+#print 'input file split into different lists\n', data
+
+
+
+
+
+#write header of arff file
+write.write('@RELATION test\r\n')
+write.write('\r\n')
+write.write('@ATTRIBUTE class NUMERIC\r\n')
+write.write('@ATTRIBUTE max NUMERIC\r\n')
+write.write('@ATTRIBUTE min NUMERIC\r\n')
+write.write('@ATTRIBUTE range NUMERIC\r\n')
+write.write('@ATTRIBUTE distance NUMERIC\r\n')
+write.write('@ATTRIBUTE entropy NUMERIC\r\n')
+write.write('\r\n')
+write.write('@DATA\r\n')
+
+
+
+#write and calculate DATA
+max_func = movingWindow.make_max()
+min_func = movingWindow.make_min()
+range_func = movingWindow.make_range()
+distance_func = movingWindow.make_distance()
+entropy_func = movingWindow.make_entropy()
+
+
+for i in xrange(len(data)):
+	classData = data[i]
+	maxList = movingWindow.MWFCount(classData, len(classData), winLen, winDisplacement, max_func)
+	minList = movingWindow.MWFCount(classData, len(classData), winLen, winDisplacement, min_func)
+	rangeList = movingWindow.MWFCount(classData, len(classData), winLen, winDisplacement, range_func)
+	distanceList = movingWindow.MWFCount(classData, len(classData), winLen, winDisplacement, distance_func)
+	entropyList = movingWindow.MWFCount(classData, len(classData), winLen, winDisplacement, entropy_func)
+	for j in xrange(len(maxList)):
+		write.write(
+				str(i)
+		+', ' + str(maxList[j])
+		+', ' + str(minList[j])
+		+', ' + str(rangeList[j])
+		+', ' + str(distanceList[j])
+		+', ' + str(distanceList[j])
+		+ '\r\n')
+
+
+#close both files
+read.close()
+write.close()

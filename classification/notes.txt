@@ -17,3 +17,8 @@ Getting values from ADC/Interrupts and shit. Get a bunch of data. Then print out
 
 Sliding window algorith. Look at data from 0-3s. Overlap window of 1.5 window. 0-3 then 1.5-4.5. Code in the sliding window. Use interupts, analog in and all the jazz
 
+
+Make skeleton arf file that weka will not reject
+with input folder and output arf file
+Now that we have functions make them print out into correctly formatted arf file
+
