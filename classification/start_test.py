@@ -1,14 +1,19 @@
+#!/usr/bin/python
+import sys
 import serial
-serdev = '/dev/ttyACM1'
-ser = serial.Serial(serdev, 9600)
 
-f = open("start_test.txt", 'w')
+f = open('myfile.txt', 'w')
+serdev = '/dev/ttyACM0'
+ser = serial.Serial(serdev)
 
 ser.write("start\r\n")
+
 while True:
 	try:
-		message = ser.read(16)
-		print message
-		f.write('0, ' + message)
+		message = ser.readline()
+		print(message)
+		f.write(message)
 	except:
 		print "fail"
+
+f.close()
