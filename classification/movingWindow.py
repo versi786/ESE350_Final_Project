@@ -2,7 +2,7 @@
 import sys
 #import serial
 import math
-#import scipy
+from scipy.fftpack import fft
 
 # length = 60
 # sampFreq = 10
@@ -85,8 +85,19 @@ def make_distance():
 
 #FFT
 def FFT_intensity(data):
-	x = scipy.fftpack.fft(data)
-	print x
+	x = fft(data)
+	sum = 0.0
+	for y in x:
+		print y.real
+		print y.imag
+		sum += math.sqrt(math.pow(y.real,2) + math.pow(y.imag,2))
+	print sum
+	sum /= len(x)
+	print sum
+	return sum
+
+def make_FFT_intensity():
+	return lambda x: FFT_intensity(x)
 
 
 
@@ -116,12 +127,13 @@ def FFT_intensity(data):
 # distanceList = MWF(data, len(data), sampFreq, winLen, winDisplacement, lineLegnth_func)
 # print 'distance: ', distanceList
 
-data = []
-j = 0
-for i in xrange(32):
-	data.append(0)
-	data.append(1)
-	data.append(0)
-	data.append(-1)
-print data 
-print len(data)
+# data = []
+# j = 0
+# for i in xrange(32):
+# 	data.append(0)
+# 	data.append(1)
+# 	data.append(0)
+# 	data.append(-1)
+# print data 
+# print len(data)
+# FFT_intensity(data)
