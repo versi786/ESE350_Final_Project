@@ -33,15 +33,17 @@ void emg_flush() {
 }
 
 int main() {
+    int flag1 = 1;
+    int flag2 = 1;
     char start_buffer[128];
     emg_position = 0;
 
     timer.start();
     //emg.attach(&emg_isr, .001);
     //accelerometer.attach(&accel_isr, .005);
-    
-    
-    while (1) {
+    flag1 = 1;
+
+    while (flag1) {
         if (pc.readable()) {
             pc.scanf("%s", start_buffer);
         }
@@ -49,11 +51,11 @@ int main() {
         if (strcmp(start_buffer , "start") == 0) {
              pc.printf("%s\r\n", start_buffer);
              emg.attach(&emg_isr, .001);
-             break;
+             flag1 = 0;
         }
     }
-
-    while (1) {
+    flag2 = 1;
+    while (flag2) {
         // measure accelerometer data
 //        if (accel.read_u16() > chewing_threshold) {
 //            pc.printf("Chewing: %d\r\n", accel.read_u16());
@@ -63,7 +65,12 @@ int main() {
         if (emg_position > 2999) {
             emg.detach();
             emg_flush();
-            emg.attach(&emg_isr, .001);
+            //emg.attach(&emg_isr, .001);
+            //break;
+            //flag2 = 0;
+            main();
         }
     }
+    pc.printf("done");
+    return(1);
 }
