@@ -44,12 +44,12 @@ data.append(temp)
 #write header of arff file
 write.write('@RELATION test\r\n')
 write.write('\r\n')
-write.write('@ATTRIBUTE class NUMERIC\r\n')
 write.write('@ATTRIBUTE max NUMERIC\r\n')
 write.write('@ATTRIBUTE min NUMERIC\r\n')
 write.write('@ATTRIBUTE range NUMERIC\r\n')
 write.write('@ATTRIBUTE distance NUMERIC\r\n')
 write.write('@ATTRIBUTE entropy NUMERIC\r\n')
+write.write('@ATTRIBUTE class {rest,clenched}\r\n')
 write.write('\r\n')
 write.write('@DATA\r\n')
 
@@ -70,14 +70,19 @@ for i in xrange(len(data)):
 	rangeList = movingWindow.MWFCount(classData, len(classData), winLen, winDisplacement, range_func)
 	distanceList = movingWindow.MWFCount(classData, len(classData), winLen, winDisplacement, distance_func)
 	entropyList = movingWindow.MWFCount(classData, len(classData), winLen, winDisplacement, entropy_func)
+	classification = ""
+	if(i == 0):
+		classification = "rest"
+	else:
+		classification = "clenched"
 	for j in xrange(len(maxList)):
 		write.write(
-				str(i)
-		+', ' + str(maxList[j])
+		str(maxList[j])
 		+', ' + str(minList[j])
 		+', ' + str(rangeList[j])
 		+', ' + str(distanceList[j])
 		+', ' + str(distanceList[j])
+		+', ' + classification
 		+ '\r\n')
 
 
