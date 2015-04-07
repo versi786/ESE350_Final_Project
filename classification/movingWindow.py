@@ -1,7 +1,8 @@
 #!/usr/bin/python
 import sys
-import serial
+#import serial
 import math
+#import scipy
 
 # length = 60
 # sampFreq = 10
@@ -50,8 +51,6 @@ def make_min():
 def make_range():
 	return lambda x: max(x) - min(x)
 
-#FFT
-
 #Entropy
 def entropy(data):
     val_freq     = {}
@@ -82,7 +81,13 @@ def distance(lst):
 
 def make_distance():
 	return lambda x: distance(x)
-#
+
+
+#FFT
+def FFT_intensity(data):
+	x = scipy.fftpack.fft(data)
+	print x
+
 
 
 # data = [1,2,3,4,5,6]
@@ -110,3 +115,13 @@ def make_distance():
 # lineLegnth_func = make_distance()
 # distanceList = MWF(data, len(data), sampFreq, winLen, winDisplacement, lineLegnth_func)
 # print 'distance: ', distanceList
+
+data = []
+j = 0
+for i in xrange(32):
+	data.append(0)
+	data.append(1)
+	data.append(0)
+	data.append(-1)
+print data 
+print len(data)
