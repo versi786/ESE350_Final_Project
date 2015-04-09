@@ -1,0 +1,78 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -C 0.25 -M 2
+Relation:     test
+Instances:    958
+Attributes:   7
+              max
+              min
+              range
+              distance
+              entropy
+              FFT_intensity
+              class
+Test mode:evaluate on training data
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+entropy <= 6.505481
+|   entropy <= 6.207832: talking (387.0/14.0)
+|   entropy > 6.207832
+|   |   FFT_intensity <= 61581.589328: talking (70.0/12.0)
+|   |   FFT_intensity > 61581.589328
+|   |   |   max <= 25318
+|   |   |   |   max <= 23525: talking (36.0/16.0)
+|   |   |   |   max > 23525: chewing (8.0)
+|   |   |   max > 25318
+|   |   |   |   distance <= 3952: chewing (3.0/1.0)
+|   |   |   |   distance > 3952: talking (14.0)
+entropy > 6.505481
+|   entropy <= 6.810452
+|   |   distance <= 4418
+|   |   |   min <= -9506
+|   |   |   |   min <= -11714: chewing (17.0)
+|   |   |   |   min > -11714
+|   |   |   |   |   FFT_intensity <= 62663.694621: talking (6.0/1.0)
+|   |   |   |   |   FFT_intensity > 62663.694621: chewing (5.0)
+|   |   |   min > -9506: chewing (34.0)
+|   |   distance > 4418
+|   |   |   distance <= 4485: talking (6.0/1.0)
+|   |   |   distance > 4485
+|   |   |   |   max <= 19332: talking (2.0)
+|   |   |   |   max > 19332: chewing (10.0/1.0)
+|   entropy > 6.810452: chewing (360.0)
+
+Number of Leaves  :   14
+
+Size of the tree :  27
+
+
+Time taken to build model: 0.01 seconds
+
+=== Evaluation on training set ===
+=== Summary ===
+
+Correctly Classified Instances         912               95.1983 %
+Incorrectly Classified Instances        46                4.8017 %
+Kappa statistic                          0.904 
+Mean absolute error                      0.0742
+Root mean squared error                  0.1927
+Relative absolute error                 14.847  %
+Root relative squared error             38.5318 %
+Total Number of Instances              958     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.996     0.092      0.916     0.996     0.954      0.979    talking
+                 0.908     0.004      0.995     0.908     0.95       0.979    chewing
+Weighted Avg.    0.952     0.048      0.955     0.952     0.952      0.979
+
+=== Confusion Matrix ===
+
+   a   b   <-- classified as
+ 477   2 |   a = talking
+  44 435 |   b = chewing

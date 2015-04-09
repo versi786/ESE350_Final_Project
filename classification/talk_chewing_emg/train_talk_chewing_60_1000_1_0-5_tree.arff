@@ -1,0 +1,54 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -C 0.25 -M 2
+Relation:     test
+Instances:    238
+Attributes:   7
+              max
+              min
+              range
+              distance
+              entropy
+              FFT_intensity
+              class
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+entropy <= 7.756475: talking (120.0/1.0)
+entropy > 7.756475: chewing (118.0)
+
+Number of Leaves  : 	2
+
+Size of the tree : 	3
+
+
+Time taken to build model: 0 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         236               99.1597 %
+Incorrectly Classified Instances         2                0.8403 %
+Kappa statistic                          0.9832
+Mean absolute error                      0.0126
+Root mean squared error                  0.0919
+Relative absolute error                  2.5131 %
+Root relative squared error             18.3752 %
+Total Number of Instances              238     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.992     0.008      0.992     0.992     0.992      0.988    talking
+                 0.992     0.008      0.992     0.992     0.992      0.988    chewing
+Weighted Avg.    0.992     0.008      0.992     0.992     0.992      0.988
+
+=== Confusion Matrix ===
+
+   a   b   <-- classified as
+ 118   1 |   a = talking
+   1 118 |   b = chewing
