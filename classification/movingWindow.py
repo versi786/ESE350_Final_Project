@@ -11,12 +11,13 @@ from scipy.fftpack import fft
 
 def numWindows(dataLength, sampFreq, winLen, winDisplacement):
 	numWindows = ((((dataLength/sampFreq)- winLen)/winDisplacement) + 1)
-	return numWindows
+	return int(numWindows)
 
 def MWF(data, dataLength, sampFreq, winLen, winDisplacement, func):
 	l = []
 	nw = numWindows(dataLength, sampFreq, winLen, winDisplacement)
 	x = 0
+	nw = int(round(nw))
 	for j in xrange(0, nw):
 		l.append(func(data[x:x + winLen]))
 		x += winDisplacement
@@ -88,12 +89,8 @@ def FFT_intensity(data):
 	x = fft(data)
 	sum = 0.0
 	for y in x:
-		print y.real
-		print y.imag
 		sum += math.sqrt(math.pow(y.real,2) + math.pow(y.imag,2))
-	print sum
 	sum /= len(x)
-	print sum
 	return sum
 
 def make_FFT_intensity():

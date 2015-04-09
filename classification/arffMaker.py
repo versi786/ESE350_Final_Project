@@ -3,10 +3,17 @@ import movingWindow
 
 
 
+
 #MAIN
-#sampFreq = 10 #samples/second
-winLen = 50 #samples
-winDisplacement = 25 #samples
+# collectionTime = 60 #time in seconds
+sampFreq = 1000 #Hz
+winLenSeconds = 1#seconds
+winDisplacementSeconds = 0.5
+classifications = ["talking", "chewing"]
+
+# dataLength = collectionTime * sampFreq #samples aka len(data)
+winLen = int(sampFreq * winLenSeconds) #samples = frequency * secondsOfWindow
+winDisplacement = int(sampFreq * winDisplacementSeconds) #seconds
 
 if(len(sys.argv) != 3):
 	print 'Usage: python arffMaker.py <input file> <output file>'
@@ -38,9 +45,6 @@ data.append(temp)
 #print 'input file split into different lists\n', data
 
 
-
-
-
 #write header of arff file
 write.write('@RELATION test\r\n')
 write.write('\r\n')
@@ -49,7 +53,13 @@ write.write('@ATTRIBUTE min NUMERIC\r\n')
 write.write('@ATTRIBUTE range NUMERIC\r\n')
 write.write('@ATTRIBUTE distance NUMERIC\r\n')
 write.write('@ATTRIBUTE entropy NUMERIC\r\n')
-write.write('@ATTRIBUTE class {rest,clenched}\r\n')
+write.write('@ATTRIBUTE FFT_intensity NUMERIC\r\n')
+write.write('@ATTRIBUTE class {')
+for i in xrange(len(classifications)):
+	write.write(classifications[i])
+	if i != (len(classifications) - 1):
+		write.write(', ')
+write.write('}\r\n')
 write.write('\r\n')
 write.write('@DATA\r\n')
 
@@ -61,6 +71,8 @@ min_func = movingWindow.make_min()
 range_func = movingWindow.make_range()
 distance_func = movingWindow.make_distance()
 entropy_func = movingWindow.make_entropy()
+FFT_intensity_func = movingWindow.make_FFT_intensity()
+
 
 
 for i in xrange(len(data)):
@@ -70,18 +82,16 @@ for i in xrange(len(data)):
 	rangeList = movingWindow.MWFCount(classData, len(classData), winLen, winDisplacement, range_func)
 	distanceList = movingWindow.MWFCount(classData, len(classData), winLen, winDisplacement, distance_func)
 	entropyList = movingWindow.MWFCount(classData, len(classData), winLen, winDisplacement, entropy_func)
-	classification = ""
-	if(i == 0):
-		classification = "rest"
-	else:
-		classification = "clenched"
+	FFT_intensityList = movingWindow.MWFCount(classData, len(classData), winLen, winDisplacement, FFT_intensity_func)
+	classification = classifications[i]
 	for j in xrange(len(maxList)):
 		write.write(
 		str(maxList[j])
 		+', ' + str(minList[j])
 		+', ' + str(rangeList[j])
 		+', ' + str(distanceList[j])
-		+', ' + str(distanceList[j])
+		+', ' + str(entropyList[j])
+		+', ' + str(FFT_intensityList[j])
 		+', ' + classification
 		+ '\r\n')
 
