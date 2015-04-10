@@ -53,7 +53,7 @@ write.write('@ATTRIBUTE min NUMERIC\r\n')
 write.write('@ATTRIBUTE range NUMERIC\r\n')
 write.write('@ATTRIBUTE distance NUMERIC\r\n')
 write.write('@ATTRIBUTE entropy NUMERIC\r\n')
-write.write('@ATTRIBUTE FFT_intensity NUMERIC\r\n')
+#write.write('@ATTRIBUTE FFT_intensity NUMERIC\r\n')
 write.write('@ATTRIBUTE class {')
 for i in xrange(len(classifications)):
 	write.write(classifications[i])
@@ -91,7 +91,7 @@ for i in xrange(len(data)):
 		+', ' + str(rangeList[j])
 		+', ' + str(distanceList[j])
 		+', ' + str(entropyList[j])
-		+', ' + str(FFT_intensityList[j])
+#		+', ' + str(FFT_intensityList[j])
 		+', ' + classification
 		+ '\r\n')
 

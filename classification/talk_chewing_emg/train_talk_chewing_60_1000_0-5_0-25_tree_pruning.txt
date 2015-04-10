@@ -1,0 +1,75 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -R -N 3 -Q 1 -M 2
+Relation:     test
+Instances:    958
+Attributes:   7
+              max
+              min
+              range
+              distance
+              entropy
+              FFT_intensity
+              class
+Test mode:evaluate on training data
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+entropy <= 6.588446
+|   entropy <= 6.207832: talking (253.0/7.0)
+|   entropy > 6.207832
+|   |   min <= -7282
+|   |   |   max <= 15204: chewing (7.0/1.0)
+|   |   |   max > 15204
+|   |   |   |   max <= 21782: talking (59.0/8.0)
+|   |   |   |   max > 21782
+|   |   |   |   |   max <= 25318
+|   |   |   |   |   |   max <= 23750
+|   |   |   |   |   |   |   range <= 34360: chewing (10.0/3.0)
+|   |   |   |   |   |   |   range > 34360: talking (5.0)
+|   |   |   |   |   |   max > 23750: chewing (6.0)
+|   |   |   |   |   max > 25318: talking (12.0/1.0)
+|   |   min > -7282: chewing (6.0)
+entropy > 6.588446
+|   entropy <= 6.705301
+|   |   min <= -10498
+|   |   |   min <= -12035: chewing (5.0)
+|   |   |   min > -12035: talking (4.0/1.0)
+|   |   min > -10498: chewing (16.0)
+|   entropy > 6.705301: chewing (256.0)
+
+Number of Leaves  : 	12
+
+Size of the tree : 	23
+
+
+Time taken to build model: 0.01 seconds
+
+=== Evaluation on training set ===
+=== Summary ===
+
+Correctly Classified Instances         913               95.3027 %
+Incorrectly Classified Instances        45                4.6973 %
+Kappa statistic                          0.9061
+Mean absolute error                      0.0692
+Root mean squared error                  0.2022
+Relative absolute error                 13.8494 %
+Root relative squared error             40.4448 %
+Total Number of Instances              958     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.981     0.075      0.929     0.981     0.954      0.974    talking
+                 0.925     0.019      0.98      0.925     0.952      0.974    chewing
+Weighted Avg.    0.953     0.047      0.954     0.953     0.953      0.974
+
+=== Confusion Matrix ===
+
+   a   b   <-- classified as
+ 470   9 |   a = talking
+  36 443 |   b = chewing
+

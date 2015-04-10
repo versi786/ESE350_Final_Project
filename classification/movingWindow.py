@@ -67,7 +67,6 @@ def entropy(data):
     # Calculate the entropy of the data for the target attribute
     for freq in val_freq.values():
         data_entropy += (-freq/len(data)) * math.log(freq/len(data), 2) 
-        
     return data_entropy
 def make_entropy():
 	return lambda x: entropy(x)

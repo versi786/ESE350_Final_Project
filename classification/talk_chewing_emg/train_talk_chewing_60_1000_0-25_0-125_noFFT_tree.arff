@@ -1,0 +1,68 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -C 0.25 -M 2
+Relation:     test
+Instances:    958
+Attributes:   6
+              max
+              min
+              range
+              distance
+              entropy
+              class
+Test mode:evaluate on training data
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+entropy <= 6.505481: talking (518.0/52.0)
+entropy > 6.505481
+|   entropy <= 6.810452
+|   |   distance <= 4418
+|   |   |   min <= -9506
+|   |   |   |   min <= -11714: chewing (17.0)
+|   |   |   |   min > -11714
+|   |   |   |   |   max <= 18372: talking (4.0)
+|   |   |   |   |   max > 18372: chewing (7.0/1.0)
+|   |   |   min > -9506: chewing (34.0)
+|   |   distance > 4418
+|   |   |   distance <= 4485: talking (6.0/1.0)
+|   |   |   distance > 4485
+|   |   |   |   max <= 19332: talking (2.0)
+|   |   |   |   max > 19332: chewing (10.0/1.0)
+|   entropy > 6.810452: chewing (360.0)
+
+Number of Leaves  : 	9
+
+Size of the tree : 	17
+
+
+Time taken to build model: 0.01 seconds
+
+=== Evaluation on training set ===
+=== Summary ===
+
+Correctly Classified Instances         903               94.2589 %
+Incorrectly Classified Instances        55                5.7411 %
+Kappa statistic                          0.8852
+Mean absolute error                      0.1031
+Root mean squared error                  0.227 
+Relative absolute error                 20.6139 %
+Root relative squared error             45.4026 %
+Total Number of Instances              958     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.996     0.111      0.9       0.996     0.945      0.946    talking
+                 0.889     0.004      0.995     0.889     0.939      0.946    chewing
+Weighted Avg.    0.943     0.057      0.948     0.943     0.942      0.946
+
+=== Confusion Matrix ===
+
+   a   b   <-- classified as
+ 477   2 |   a = talking
+  53 426 |   b = chewing
+

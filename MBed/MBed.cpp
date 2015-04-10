@@ -8,11 +8,15 @@ Timer timer;
 Ticker emg;
 Ticker accelerometer;
 
-AnalogIn emg_pin(p15);
+AnalogIn emg_pin(p20);
 AnalogIn accel(p17);
 
-int emg_buffer[3000];
+int emg_buffer[5000];
 int emg_position;
+
+char start_buffer[128];
+char empty_buffer[128];
+static int iteration = -1;
 
 int chewing_threshold = 40000;
 
@@ -26,17 +30,19 @@ void accel_isr() {
 }
 
 void emg_flush() {
-    for (int i = 0; i < 3000; i++) {
-        pc.printf("%d\r\n", emg_buffer[i]);
+    for (int i = 0; i < 5000; i++) {
+        pc.printf("%d, %d\r\n", iteration, emg_buffer[i]);
     }
     emg_position = 0;
 }
 
+
+
 int main() {
     int flag1 = 1;
     int flag2 = 1;
-    char start_buffer[128];
     emg_position = 0;
+    iteration++;
 
     timer.start();
     //emg.attach(&emg_isr, .001);
@@ -49,7 +55,8 @@ int main() {
         }
         //printf("%d", strcmp(start_buffer , "start"));
         if (strcmp(start_buffer , "start") == 0) {
-             pc.printf("%s\r\n", start_buffer);
+             //pc.printf("%s\r\n", start_buffer);
+             strcpy(start_buffer, empty_buffer);
              emg.attach(&emg_isr, .001);
              flag1 = 0;
         }
@@ -62,7 +69,7 @@ int main() {
 //        } else {
 //            pc.printf("Resting: %d\r\n", accel.read_u16());
 //        }
-        if (emg_position > 2999) {
+        if (emg_position > 4999) {
             emg.detach();
             emg_flush();
             //emg.attach(&emg_isr, .001);
@@ -72,5 +79,10 @@ int main() {
         }
     }
     pc.printf("done");
-    return(1);
+    return 1;
 }
+
+//int main() {
+//    main_function();
+//    return 1;
+//}
