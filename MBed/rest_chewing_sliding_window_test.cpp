@@ -43,7 +43,7 @@ int minArr(int start, int end, int length){
 }
 
 double log2( double number ) {
-   return log( number ) / log( 2.0 ) ;
+   return log(number) / log(2.0) ;
 }
 
 double entropyArr (int start, int end, int length) {
