@@ -25,8 +25,8 @@ void emg_isr() {
 int maxArr(int start, int end, int length){
     int max = -4000000;
     for(int i = start; i < end; i++){
-        if(max < emg_buffer[i]){
-            max = emg_buffer[i];
+        if(max < emg_buffer[i%EMG_BUFFER_LENGTH]){
+            max = emg_buffer[i%EMG_BUFFER_LENGTH];
         }
     }
     return max;
@@ -35,8 +35,8 @@ int maxArr(int start, int end, int length){
 int minArr(int start, int end, int length){
     int min = 4000000;
     for(int i = start; i < end; i++){
-        if(min > emg_buffer[i]){
-            min = emg_buffer[i];
+        if(min > emg_buffer[i%EMG_BUFFER_LENGTH]){
+            min = emg_buffer[i%EMG_BUFFER_LENGTH];
         }
     }
     return min;
@@ -49,7 +49,7 @@ double log2( double number ) {
 double entropyArr (int start, int end, int length) {
    std::map<int, int> frequencies ;
    for (int i = start ; i < end; i++){
-        frequencies[emg_buffer[i]]++;
+        frequencies[emg_buffer[i%EMG_BUFFER_LENGTH]]++;
    }
    double infocontent = 0;
    
@@ -66,7 +66,7 @@ int distanceArr(int start, int end, int length){
     int total = 0;
     int temp = 0;
     for(int i = start; i < end - 1; i++){
-        temp = emg_buffer[i] -emg_buffer[i+1];
+        temp = emg_buffer[i%EMG_BUFFER_LENGTH] -emg_buffer[(i+1)%EMG_BUFFER_LENGTH];
         if(temp < 0){
             temp = -temp;
         }
@@ -135,10 +135,6 @@ int main() {
             // pc.printf("\r\nclassification:%d\r\n\r\n", classification);
             myled = classification;
             cur_position = (cur_position + displacement) % EMG_BUFFER_LENGTH;
-            if(cur_position = 875){
-                //ignore wrap around case
-                cur_position = 0;
-            }
             // pc.printf("%d/r/n", cur_position);
         }
     }
