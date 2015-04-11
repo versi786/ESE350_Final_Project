@@ -23,21 +23,21 @@ void emg_isr() {
     // pc.printf("%d\r\n", emg_pin.read_u16());
 }
 
-int maxArr(int arr[], int length){
+int maxArr(int start, int end, int length){
     int max = -4000000;
-    for(int i = 0; i < length; i++){
-        if(max < arr[i]){
-            max = arr[i];
+    for(int i = start; i < end; i++){
+        if(max < emg_buffer[i]){
+            max = emg_buffer[i];
         }
     }
     return max;
 }
 
-int minArr(int arr[], int length){
+int minArr(int start, int end, int length){
     int min = 4000000;
-    for(int i = 0; i < length; i++){
-        if(min > arr[i]){
-            min = arr[i];
+    for(int i = start; i < end; i++){
+        if(min > emg_buffer[i]){
+            min = emg_buffer[i];
         }
     }
     return min;
@@ -47,10 +47,11 @@ double log2( double number ) {
    return log( number ) / log( 2.0 ) ;
 }
 
-double entropyArr (int arr[] , int length) {
+double entropyArr (int start, int end, int length) {
    std::map<int, int> frequencies ;
-   for (int i = 0 ; i < length; i++ )
-     frequencies[ arr[i] ]++;
+   for (int i = start ; i <end; i++ ){
+        frequencies[ emg_buffer[i] ]++;
+   }
    int numlen = length;
    double infocontent = 0;
    
@@ -63,11 +64,11 @@ double entropyArr (int arr[] , int length) {
    return infocontent;
 }
 
-int distanceArr(int arr[], int length){
+int distanceArr(int start, int end, int length){
     int total = 0;
     int temp = 0;
-    for(int i = 0; i < length - 1; i++){
-        temp = arr[i] -arr[i+1];
+    for(int i = start; i < end - 1; i++){
+        temp = emg_buffer[i] -emg_buffer[i+1];
         if(temp < 0){
             temp = -temp;
         }
@@ -76,11 +77,11 @@ int distanceArr(int arr[], int length){
     return total/(length-1);
 }
 
-int classify(int arr[], int length) {
-    double entropy = entropyArr(arr, length);
-    int max = maxArr(arr, length);
-    int min = minArr(arr, length);
-    int distance = distanceArr(arr, length);
+int classify(int start, int end, int length) {
+    double entropy = entropyArr(start, end, length);
+    int max = maxArr(start, end, length);
+    int min = minArr(start, end, length);
+    int distance = distanceArr(start, end, length);
     // pc.printf("entropy: %f\r\nmax:%d\r\nmin:%d\r\ndistance:%d\r\n", entropy, max, min, distance);
     if(entropy <= 6.505481){
         return 0;
@@ -126,13 +127,12 @@ int main() {
     emg.attach(&emg_isr, .001);
     int cur_position = 250;
     int displacement = 250;
-    int window[250];
+    //int window[250];
     int classification;
     while(1) {
-        // pc.printf("hi\r\n");
+        //pc.printf("hi\r\n");
         if(emg_position >= cur_position){
-            memcpy(window, window + (cur_position-250), 250);
-            classification = classify(window, 250);
+            classification = classify(cur_position, cur_position + 250, 250);
             // pc.printf("\r\nclassification:%d\r\n\r\n", classification);
             myled = classification;
             cur_position = (cur_position + displacement) % EMG_BUFFER_LENGTH;
