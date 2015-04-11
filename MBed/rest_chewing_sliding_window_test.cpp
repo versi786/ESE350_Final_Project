@@ -25,8 +25,8 @@ void emg_isr() {
 int maxArr(int start, int end, int length){
     int max = -4000000;
     for(int i = start; i < end; i++){
-        if(max < emg_buffer[i%EMG_BUFFER_LENGTH]){
-            max = emg_buffer[i%EMG_BUFFER_LENGTH];
+        if(max < emg_buffer[i]){
+            max = emg_buffer[i];
         }
     }
     return max;
@@ -35,21 +35,21 @@ int maxArr(int start, int end, int length){
 int minArr(int start, int end, int length){
     int min = 4000000;
     for(int i = start; i < end; i++){
-        if(min > emg_buffer[i%EMG_BUFFER_LENGTH]){
-            min = emg_buffer[i%EMG_BUFFER_LENGTH];
+        if(min > emg_buffer[i]){
+            min = emg_buffer[i];
         }
     }
     return min;
 }
 
 double log2( double number ) {
-   return log(number) / log(2.0) ;
+   return log( number ) / log( 2.0 ) ;
 }
 
 double entropyArr (int start, int end, int length) {
    std::map<int, int> frequencies ;
    for (int i = start ; i < end; i++){
-        frequencies[emg_buffer[i%EMG_BUFFER_LENGTH]]++;
+        frequencies[emg_buffer[i]]++;
    }
    double infocontent = 0;
    
@@ -66,7 +66,7 @@ int distanceArr(int start, int end, int length){
     int total = 0;
     int temp = 0;
     for(int i = start; i < end - 1; i++){
-        temp = emg_buffer[i%EMG_BUFFER_LENGTH] -emg_buffer[(i+1)%EMG_BUFFER_LENGTH];
+        temp = emg_buffer[i] -emg_buffer[i+1];
         if(temp < 0){
             temp = -temp;
         }
@@ -125,6 +125,7 @@ int main() {
     emg.attach(&emg_isr, .001);
     int cur_position = 250;
     int displacement = 125;
+    //int window[250];
     int classification;
     while(1) {
         //pc.printf("hi\r\n");
@@ -135,6 +136,10 @@ int main() {
             // pc.printf("\r\nclassification:%d\r\n\r\n", classification);
             myled = classification;
             cur_position = (cur_position + displacement) % EMG_BUFFER_LENGTH;
+            if(cur_position == 1875){
+                //ignore
+                cur_position = 0;
+            }
             // pc.printf("%d/r/n", cur_position);
         }
     }
