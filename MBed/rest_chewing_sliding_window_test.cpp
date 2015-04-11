@@ -3,16 +3,15 @@
 #include <map>
 #include "math.h"
 using namespace std;
-#define EMG_BUFFER_LENGTH 1000
+#define EMG_BUFFER_LENGTH 2000
 
 DigitalOut myled(LED1);
+DigitalOut myled2(LED2);
 Serial pc(USBTX, USBRX);
 Timer timer;
 Ticker emg;
 Ticker accelerometer;
 AnalogIn emg_pin(p20);
-AnalogIn accel(p17);
-
 
 int emg_buffer[EMG_BUFFER_LENGTH];
 int emg_position;
@@ -49,16 +48,15 @@ double log2( double number ) {
 
 double entropyArr (int start, int end, int length) {
    std::map<int, int> frequencies ;
-   for (int i = start ; i <end; i++ ){
-        frequencies[ emg_buffer[i] ]++;
+   for (int i = start ; i < end; i++){
+        frequencies[emg_buffer[i]]++;
    }
-   int numlen = length;
    double infocontent = 0;
    
    for (std::map<int,int>::iterator it = frequencies.begin(); it != frequencies.end(); it++) {
       std::pair<int , int> p = *it;
-      double freq = static_cast<double>( p.second ) / numlen ;
-      infocontent += freq * log2( freq ) ;
+      double freq = static_cast<double>(p.second) / length;
+      infocontent += freq * log2(freq);
    }
    infocontent *= -1 ;
    return infocontent;
@@ -126,16 +124,21 @@ int main() {
     timer.start();
     emg.attach(&emg_isr, .001);
     int cur_position = 250;
-    int displacement = 250;
-    //int window[250];
+    int displacement = 125;
     int classification;
     while(1) {
         //pc.printf("hi\r\n");
         if(emg_position >= cur_position){
+            myled2 = 1;
             classification = classify(cur_position, cur_position + 250, 250);
+            myled2 = 0;
             // pc.printf("\r\nclassification:%d\r\n\r\n", classification);
             myled = classification;
             cur_position = (cur_position + displacement) % EMG_BUFFER_LENGTH;
+            if(cur_position = 875){
+                //ignore wrap around case
+                cur_position = 0;
+            }
             // pc.printf("%d/r/n", cur_position);
         }
     }
