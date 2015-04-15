@@ -1,0 +1,72 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -C 0.25 -M 2
+Relation:     test
+Instances:    1437
+Attributes:   6
+              max
+              min
+              range
+              distance
+              entropy
+              class
+Test mode:evaluate on training data
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+max <= 2320: disconnected (479.0)
+max > 2320
+|   entropy <= 6.505481: talking (518.0/52.0)
+|   entropy > 6.505481
+|   |   entropy <= 6.810452
+|   |   |   distance <= 4418
+|   |   |   |   min <= -9506
+|   |   |   |   |   min <= -11714: chewing (17.0)
+|   |   |   |   |   min > -11714
+|   |   |   |   |   |   max <= 18372: talking (4.0)
+|   |   |   |   |   |   max > 18372: chewing (7.0/1.0)
+|   |   |   |   min > -9506: chewing (34.0)
+|   |   |   distance > 4418
+|   |   |   |   distance <= 4485: talking (6.0/1.0)
+|   |   |   |   distance > 4485
+|   |   |   |   |   max <= 19332: talking (2.0)
+|   |   |   |   |   max > 19332: chewing (10.0/1.0)
+|   |   entropy > 6.810452: chewing (360.0)
+
+Number of Leaves  : 	10
+
+Size of the tree : 	19
+
+
+Time taken to build model: 0.08 seconds
+
+=== Evaluation on training set ===
+=== Summary ===
+
+Correctly Classified Instances        1382               96.1726 %
+Incorrectly Classified Instances        55                3.8274 %
+Kappa statistic                          0.9426
+Mean absolute error                      0.0458
+Root mean squared error                  0.1513
+Relative absolute error                 10.307  %
+Root relative squared error             32.1045 %
+Total Number of Instances             1437     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.996     0.055      0.9       0.996     0.945      0.973    talking
+                 0.889     0.002      0.995     0.889     0.939      0.973    chewing
+                 1         0          1         1         1          1        disconnected
+Weighted Avg.    0.962     0.019      0.965     0.962     0.962      0.982
+
+=== Confusion Matrix ===
+
+   a   b   c   <-- classified as
+ 477   2   0 |   a = talking
+  53 426   0 |   b = chewing
+   0   0 479 |   c = disconnected
+

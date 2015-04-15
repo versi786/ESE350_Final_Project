@@ -9,7 +9,7 @@ import movingWindow
 sampFreq = 1000 #Hz
 winLenSeconds = 0.25#seconds
 winDisplacementSeconds = 0.125 # seconds
-classifications = ["talking", "chewing"]
+classifications = ["talking", "chewing", "disconnected"]
 
 # dataLength = collectionTime * sampFreq #samples aka len(data)
 winLen = int(sampFreq * winLenSeconds) #samples = frequency * secondsOfWindow
