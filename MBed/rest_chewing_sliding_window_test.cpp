@@ -135,7 +135,7 @@ int main() {
         if(emg_position >= cur_position){
             //pc.printf("%d\r\n", cur_position);
             myled2 = 1;
-            classification = classify(cur_position-250, cur_position, 250);
+            classification = classify(cur_position, cur_position - 250, 250);
             myled2 = 0;
             // pc.printf("\r\nclassification:%d\r\n\r\n", classification);
             myled = classification;
