@@ -3,7 +3,7 @@
 #include <map>
 #include "math.h"
 using namespace std;
-#define EMG_BUFFER_LENGTH 3000
+#define EMG_BUFFER_LENGTH 2000
 
 DigitalOut myled(LED1);
 DigitalOut myled2(LED2);
@@ -80,7 +80,8 @@ int classify(int start, int end, int length) {
     int max = maxArr(start, end, length);
     int min = minArr(start, end, length);
     int distance = distanceArr(start, end, length);
-    // pc.printf("entropy: %f\r\nmax:%d\r\nmin:%d\r\ndistance:%d\r\n", entropy, max, min, distance);
+    pc.printf("start:%d       End:%d   \r\n",start, end); 
+    pc.printf("entropy: %f\r\nmax:%d\r\nmin:%d\r\ndistance:%d\r\n", entropy, max, min, distance);
     if(entropy <= 6.505481){
         return 0;
     }else{
@@ -132,17 +133,17 @@ int main() {
         // if(cur_position == 3000 && emg_position < 100){
         //     cur_position = 250;    
         // }
-        if((cur_position == 3000 && emg_position < 125) || emg_position >= cur_position){
+        if((cur_position == EMG_BUFFER_LENGTH && emg_position < 125) || emg_position >= cur_position){
             //pc.printf("%d\r\n", cur_position);
             myled2 = 1;
-            classification = classify(cur_position, cur_position - 250, 250);
+            classification = classify(cur_position - 250, cur_position, 250);
             myled2 = 0;
             // pc.printf("\r\nclassification:%d\r\n\r\n", classification);
             myled = classification;
             pc.printf("p:%d\r\n", cur_position);
             pc.printf("c:%d\r\n", classification);
             cur_position = (cur_position + displacement) /*% EMG_BUFFER_LENGTH*/;
-            if(cur_position == (3000 + displacement)){
+            if(cur_position == (EMG_BUFFER_LENGTH + displacement)){
                 //ignore
                 cur_position = 250;
             }
