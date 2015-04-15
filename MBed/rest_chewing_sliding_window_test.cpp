@@ -129,10 +129,10 @@ int main() {
     int classification;
     while(1) {
         //pc.printf("hi\r\n");
-        if(cur_position == 3000 && emg_position < 100){
-            cur_position = 250;    
-        }
-        if(emg_position >= cur_position){
+        // if(cur_position == 3000 && emg_position < 100){
+        //     cur_position = 250;    
+        // }
+        if((cur_position == 3000 && emg_position < 125) || emg_position >= cur_position){
             //pc.printf("%d\r\n", cur_position);
             myled2 = 1;
             classification = classify(cur_position, cur_position - 250, 250);
@@ -141,10 +141,10 @@ int main() {
             myled = classification;
             pc.printf("p:%d\r\n", cur_position);
             pc.printf("c:%d\r\n", classification);
-            cur_position = (cur_position + displacement) % EMG_BUFFER_LENGTH;
-            if(cur_position == 2875){
+            cur_position = (cur_position + displacement) /*% EMG_BUFFER_LENGTH*/;
+            if(cur_position == (3000 + displacement)){
                 //ignore
-                cur_position = 3000;
+                cur_position = 250;
             }
             // pc.printf("%d/r/n", cur_position);
         }
