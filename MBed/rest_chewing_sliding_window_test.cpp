@@ -7,7 +7,7 @@ using namespace std;
 
 DigitalOut myled(LED1);
 DigitalOut myled2(LED2);
-DigitalOut myled3(LED3);
+DigitalOut motor(p5);
 Serial pc(USBTX, USBRX);
 Timer timer;
 Ticker emg;
@@ -44,7 +44,7 @@ int minArr(int start, int end, int length){
 }
 
 double log2( double number ) {
-   return log( number ) / log(2.0) ;
+   return log(number) / log(2.0) ;
 }
 
 double entropyArr (int start, int end, int length) {
@@ -83,9 +83,7 @@ int classify(int start, int end, int length) {
     int distance = distanceArr(start, end, length);
     //pc.printf("start:%d       End:%d   \r\n",start, end); 
     //pc.printf("entropy: %f\r\nmax:%d\r\nmin:%d\r\ndistance:%d\r\n", entropy, max, min, distance);
-    if(max < 2320){
-        return 3;    
-    }
+    //return 1;
     if(entropy <= 6.505481){
         return 0;
     }else{
@@ -133,31 +131,20 @@ int main() {
     int classification;
     int cur_position = window;
     while(1) {
-        //pc.printf("hi\r\n");
-        // if(cur_position == 3000 && emg_position < 100){
-        //     cur_position = 250;    
-        // }
         if((cur_position == EMG_BUFFER_LENGTH && emg_position < displacement) || emg_position >= cur_position){
             //pc.printf("%d\r\n", cur_position);
             myled2 = 1;
             classification = classify(cur_position - window , cur_position, window);
             myled2 = 0;
-            // pc.printf("\r\nclassification:%d\r\n\r\n", classification);
-            if(classification != 3){
-                myled = classification;
-                myled3 = 0;
-            }else{
-                myled3 = 1;  
-            }
-            
+            myled = classification;
+            motor = classification;
             //pc.printf("p:%d\r\n", cur_position);
             //pc.printf("c:%d\r\n", classification);
             cur_position = (cur_position + displacement) /*% EMG_BUFFER_LENGTH*/;
             if(cur_position == (EMG_BUFFER_LENGTH + displacement)){
-                //ignore
+                //ignore overlap of end of buffer and begining of buffer
                 cur_position = window;
             }
-            // pc.printf("%d/r/n", cur_position);
         }
     }
 }
