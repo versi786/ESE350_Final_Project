@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     // MAC-address of Bluetooth module (you must edit this line)
-    private static String address = "00:15:FF:F2:19:5F";
+    private static String address = "18:EE:69:08:3D:BD";
 
     /** Called when the activity is first created. */
     @Override
