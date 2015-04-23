@@ -19,6 +19,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
+
+/* URL for thingspeak:
+ * https://api.thingspeak.com/update?key=96QF1Q3658CIIKIW&field1=DATA_TO_UPLOAD
+ */
+
 public class MainActivity extends Activity {
     private static final String TAG = "bluetooth1";
 
