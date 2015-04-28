@@ -1,7 +1,9 @@
 #include "mbed.h"
-#include "stdio.h"
+#include <stdio.h>
 #include <map>
 #include "math.h"
+#include <Serial.h>
+
 using namespace std;
 #define EMG_BUFFER_LENGTH 2000
 #define CHEW_BUFFER_LENGTH 22
@@ -10,10 +12,14 @@ DigitalOut myled(LED1);
 DigitalOut myled2(LED2);
 DigitalOut myled3(LED3);
 DigitalOut motor(p5);
+
 Serial pc(USBTX, USBRX);
+Serial bluetooth(p28, p27); // Bluetooth tx, rx
+
 Timer timer;
 Ticker emg;
 Ticker accelerometer;
+Ticker bluetooth;
 AnalogIn emg_pin(p20);
 
 int emg_buffer[EMG_BUFFER_LENGTH];
@@ -28,6 +34,7 @@ void emg_isr() {
     // pc.printf("%d\r\n", emg_pin.read_u16());
 }
 
+
 void chew_place(int classification) {
     chew_buffer[chew_position] = classification;
     chew_position = (chew_position + 1) % CHEW_BUFFER_LENGTH;
@@ -35,20 +42,25 @@ void chew_place(int classification) {
 
 void chew_test(){
     int count = 0;
+    int flag = 1;
     for(int i = 0; i < CHEW_BUFFER_LENGTH; i++){
         count += chew_buffer[i];
+        chew_buffer[i] = 0;
     }
     if(count > 8){ // 3 chews, because chews span over multiple windows
         emg.detach();
         motor = 1;
         myled3 = 1;
-        wait(2);
-        motor = 0;
-        myled3 = 0;
+        while (flag){
+            while(!bluetooth.readable());
+            if (bluetooth.getc() == 'k') {
+                motor = 0;
+                myled3 = 0;
+                flag = 0;
+            }
+        }
         emg.attach(&emg_isr, .001);
-        
     }
-
 }
 
 int maxArr(int start, int end, int length){
@@ -125,7 +137,7 @@ int classify(int start, int end, int length) {
                         return 1;
                     }else{
                         if(max <= 18372){
-                          return 0;
+                            return 0;
                         }else{
                             return 1;
                         }
@@ -155,8 +167,6 @@ int classify(int start, int end, int length) {
 
 
 int main() {
-    timer.start();
-    emg.attach(&emg_isr, .001);
     int window = 250;
     int displacement = 125;
     int classification;
@@ -164,6 +174,10 @@ int main() {
     int flag = 0;
     int count = 0;
     int count_length = CHEW_BUFFER_LENGTH/2; // wait for half of the buffer to refill before checking
+    bluetoothCheck = 0;
+    timer.start();
+    emg.attach(&emg_isr, .001);
+    
     while(1) {
         if((cur_position == EMG_BUFFER_LENGTH && emg_position < displacement) || emg_position >= cur_position){
             //pc.printf("%d\r\n", cur_position);
@@ -191,6 +205,7 @@ int main() {
             chew_test();
             flag = 0; 
             count = 0;
+            
         }
     }
 }
