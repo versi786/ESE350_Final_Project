@@ -19,7 +19,6 @@ Serial bluetooth(p28, p27); // Bluetooth tx, rx
 Timer timer;
 Ticker emg;
 Ticker accelerometer;
-Ticker bluetooth;
 AnalogIn emg_pin(p20);
 
 int emg_buffer[EMG_BUFFER_LENGTH];
@@ -171,10 +170,10 @@ int main() {
     int displacement = 125;
     int classification;
     int cur_position = window;
-    int flag = 0;
-    int count = 0;
-    int count_length = CHEW_BUFFER_LENGTH/2; // wait for half of the buffer to refill before checking
-    bluetoothCheck = 0;
+   // int flag = 0;
+   // int count = 0;
+   // int count_length = CHEW_BUFFER_LENGTH/2; // wait for half of the buffer to refill before checking
+    //bluetoothCheck = 0;
     timer.start();
     emg.attach(&emg_isr, .001);
     
@@ -194,17 +193,18 @@ int main() {
                 //ignore overlap of end of buffer and begining of buffer
                 cur_position = window;
             }
-            if(count > count_length){
-                flag = 1;    
-            }else{
-                count++;    
-            }
+            //if(count > count_length){
+//                flag = 1;    
+//            }else{
+//                count++;    
+//            }
             
-        }else if(flag) {
+        //}else if(flag) {
+        }else{
             //inbetween adding classifications, check chew_buffer
             chew_test();
-            flag = 0; 
-            count = 0;
+            //flag = 0; 
+//            count = 0;
             
         }
     }
