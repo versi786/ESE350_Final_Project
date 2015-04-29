@@ -40,23 +40,34 @@ void chew_place(int classification) {
 }
 
 void chew_test(){
+    char c = 0;
     int count = 0;
     int flag = 1;
     for(int i = 0; i < CHEW_BUFFER_LENGTH; i++){
         count += chew_buffer[i];
-        chew_buffer[i] = 0;
     }
     if(count > 8){ // 3 chews, because chews span over multiple windows
         emg.detach();
         motor = 1;
         myled3 = 1;
         while (flag){
-            while(!bluetooth.readable());
-            if (bluetooth.getc() == 'k') {
-                motor = 0;
-                myled3 = 0;
-                flag = 0;
+            pc.printf("waiting...\r\n");
+            if (bluetooth.readable()) {
+               while(bluetooth.readable()){
+                    c = bluetooth.getc();
+                    pc.printf("recieved: %c\r\n", c);
+                    if (c == 'k') {
+                        motor = 0;
+                        myled3 = 0;
+                        flag = 0;
+                        wait(3);
+                    }
+                }
+                pc.printf("\r\nreceived\r\n");
             }
+        }
+        for(int i = 0; i < CHEW_BUFFER_LENGTH; i++){
+            chew_buffer[i] = 0;
         }
         emg.attach(&emg_isr, .001);
     }
@@ -170,6 +181,7 @@ int main() {
     int displacement = 125;
     int classification;
     int cur_position = window;
+    bluetooth.baud(115200);
    // int flag = 0;
    // int count = 0;
    // int count_length = CHEW_BUFFER_LENGTH/2; // wait for half of the buffer to refill before checking
