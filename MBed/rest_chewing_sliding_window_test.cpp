@@ -11,7 +11,6 @@ using namespace std;
 DigitalOut myled(LED1);
 DigitalOut myled2(LED2);
 DigitalOut myled3(LED3);
-DigitalOut myled4(LED4);
 DigitalOut motor(p5);
 
 Serial pc(USBTX, USBRX);
@@ -52,6 +51,7 @@ void chew_test(){
         motor = 1;
         myled3 = 1;
         while (flag){
+            pc.printf("waiting...\r\n");
             if (bluetooth.readable()) {
                while(bluetooth.readable()){
                     c = bluetooth.getc();
@@ -59,13 +59,11 @@ void chew_test(){
                     if (c == 'k') {
                         motor = 0;
                         myled3 = 0;
-                        myled = 0;
                         flag = 0;
-                        myled4 = 1;
-                        wait(5);
-                        myled4 = 0;
+                        wait(3);
                     }
                 }
+                pc.printf("\r\nreceived\r\n");
             }
         }
         for(int i = 0; i < CHEW_BUFFER_LENGTH; i++){
@@ -133,6 +131,9 @@ int classify(int start, int end, int length) {
     int max = maxArr(start, end, length);
     int min = minArr(start, end, length);
     int distance = distanceArr(start, end, length);
+    //pc.printf("start:%d       End:%d   \r\n",start, end); 
+    //pc.printf("entropy: %f\r\nmax:%d\r\nmin:%d\r\ndistance:%d\r\n", entropy, max, min, distance);
+    //return 1;
     if(max < 2320){
         return 0;
     }
@@ -181,24 +182,42 @@ int main() {
     int classification;
     int cur_position = window;
     bluetooth.baud(115200);
+   // int flag = 0;
+   // int count = 0;
+   // int count_length = CHEW_BUFFER_LENGTH/2; // wait for half of the buffer to refill before checking
+    //bluetoothCheck = 0;
     timer.start();
     emg.attach(&emg_isr, .001);
     
     while(1) {
         if((cur_position == EMG_BUFFER_LENGTH && emg_position < displacement) || emg_position >= cur_position){
+            //pc.printf("%d\r\n", cur_position);
             myled2 = 1;
             classification = classify(cur_position - window , cur_position, window);
             myled2 = 0;
             myled = classification;
             chew_place(classification);
-            cur_position = (cur_position + displacement);
+            //motor = classification;
+            //pc.printf("p:%d\r\n", cur_position);
+            //pc.printf("c:%d\r\n", classification);
+            cur_position = (cur_position + displacement) /*% EMG_BUFFER_LENGTH*/;
             if(cur_position == (EMG_BUFFER_LENGTH + displacement)){
                 //ignore overlap of end of buffer and begining of buffer
                 cur_position = window;
             }
+            //if(count > count_length){
+//                flag = 1;    
+//            }else{
+//                count++;    
+//            }
+            
+        //}else if(flag) {
         }else{
             //inbetween adding classifications, check chew_buffer
             chew_test();
+            //flag = 0; 
+//            count = 0;
+            
         }
     }
 }
