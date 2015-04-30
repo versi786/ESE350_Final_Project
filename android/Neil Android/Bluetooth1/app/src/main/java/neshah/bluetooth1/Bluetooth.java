@@ -66,7 +66,7 @@ public class Bluetooth extends Activity {
 	    breakfast.setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View v) {
-				sendData("k"); // kill buzzer
+				//sendData("k"); // kill buzzer
 			    try { // post meal to thingspeak
 				    Calendar calendar = Calendar.getInstance();
 				    String time = "" + calendar.get(Calendar.HOUR) + "-"
