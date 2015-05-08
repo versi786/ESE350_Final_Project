@@ -1,2 +1,2 @@
 # ESE350_Final_Project
-vibeweight.blogspot.com
+http://vibeweight.blogspot.com
